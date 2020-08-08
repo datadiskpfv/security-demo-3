@@ -31,7 +31,9 @@ public class SDConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.httpBasic();
+        http.formLogin();
 
         http.authorizeRequests()
                 .antMatchers("/index", "/index/**").permitAll()
@@ -39,7 +41,7 @@ public class SDConfig extends WebSecurityConfigurerAdapter {
 
         http    .addFilterBefore(new Filter1(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new Filter2(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new Filter3(), UsernamePasswordAuthenticationFilter.class);
+                .addFilter(new Filter3(authenticationManager()));
     }
 
     // Override the password encoder
